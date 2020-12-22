@@ -35,7 +35,7 @@ class User
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $FIO;
+    private $FIO = "";
 
     /**
      * @ORM\Column(type="date", nullable=true)
@@ -149,5 +149,17 @@ class User
         $this->security = $security;
 
         return $this;
+    }
+
+    public function toArray(): array {
+       return [
+           'id' => $this->id,
+           'login' => $this->login,
+           'password' => $this->password,
+           'auth_key' => $this->auth_key,
+           'security' => $this->security,
+           'FIO' => $this->FIO,
+           'birthday' => $this->birthday
+       ];
     }
 }

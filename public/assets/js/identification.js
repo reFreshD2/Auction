@@ -10,6 +10,9 @@ document.getElementById('auth').addEventListener('click', function (event) {
         formReg.setAttribute('hidden', 'true');
         checkReg.removeAttribute('disabled');
         checkReg.checked = false;
+        Array.from(document.getElementsByClassName('message')).forEach(function (message) {
+            message.textContent = "";
+        });
     }
 })
 
@@ -20,5 +23,8 @@ document.getElementById('reg').addEventListener('click', function (event) {
         formAuth.setAttribute('hidden', 'true');
         checkAuth.removeAttribute('disabled');
         checkAuth.checked = false;
+        Array.from(document.getElementsByClassName('message')).forEach(function (message) {
+            message.textContent = "";
+        });
     }
 })
