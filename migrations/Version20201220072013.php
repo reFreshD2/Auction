@@ -20,7 +20,7 @@ final class Version20201220072013 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, login VARCHAR(20) NOT NULL, password VARCHAR(20) NOT NULL, fio VARCHAR(255) DEFAULT NULL, birthday DATE DEFAULT NULL, auth_key VARCHAR(41) NOT NULL, cash INT NOT NULL, security SMALLINT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, login VARCHAR(20) NOT NULL, password VARCHAR(20) NOT NULL, fio VARCHAR(255) DEFAULT NULL, birthday DATE DEFAULT NULL, auth_key VARCHAR(81) NOT NULL, cash INT NOT NULL, security SMALLINT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema) : void

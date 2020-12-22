@@ -4,7 +4,11 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\PDOException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\Exception\CantSaveUser;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +18,33 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager|\Doctrine\ORM\EntityManagerInterface|\Doctrine\ORM\Mapping\ClassMetadata
+     */
+    private $entityManager;
+
+    /**
+     * UserRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+        $this->entityManager = $this->getEntityManager();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * @param User $user
+     *
+     * @throws CantSaveUser
+     */
+    public function save(User $user): void {
+        try {
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        } catch (ORMException | DBALException | PDOException $exception) {
+            throw new CantSaveUser("Не удалось сохранить пользователя");
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if signIn == true %}
+    <input type="checkbox" id="auth" checked disabled> Авторизация
+    <input type="checkbox" id="reg"> Регистрация <br>
+    <form method="post" action="{{ url('identification') }}" id="signIn">
+    {% else %}
+    <input type="checkbox" id="auth"> Авторизация
+    <input type="checkbox" id="reg" checked disabled> Регистрация <br>
+    <form method="post" action="{{ url('identification') }}" id="signIn" hidden>
+    {% endif %}
+        Логин: <input type="text" name="login" maxlength="20"> <br>
+        Пароль: <input type="password" name="password" maxlength="20"> <br>
+        <div class="message"> {{ message }}</div>
+        <input type="hidden" name="signIn">
+        <input type="submit" value="Войти">
+    </form>
+    {% if signIn == true %}
+    <form method="post" action="{{ url('identification') }}" id="signUp" hidden>
+    {% else %}
+    <form method="post" action="{{ url('identification') }}" id="signUp">
+    {% endif%}
+        Логин: <input type="text" name="login" maxlength="20"> <br>
+        Пароль: <input type="password" name="password" maxlength="20"> <br>
+        ФИО: <input type="text" name="personal" maxlength="80"> <br>
+        День рождения: <input type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="2002-12-31"> <br>
+        <div class="message"> {{ message }}</div>
+        <input type="hidden" name="signUp">
+        <input type="submit" value="Зарегистрироваться">
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/js/identification.js"></script>
+{% endblock %}
