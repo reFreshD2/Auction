@@ -44,7 +44,7 @@ class IdentificationController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        if ($request->request->has('singIn')) {
+        if ($request->request->has('signIn')) {
             $signIn = $this->signIn($request);
             if ($signIn['success']) {
                 // todo заменить заглушки на страницы пользователей
