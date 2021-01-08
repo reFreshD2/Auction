@@ -41,29 +41,17 @@ class IdentificationController extends AbstractController
      * @Route("/identification", name="identification")
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function index(Request $request): Response
     {
         if ($request->request->has('signIn')) {
             $signIn = $this->signIn($request);
             if ($signIn['success']) {
-                // todo заменить заглушки на страницы пользователей
-                switch ($signIn['secure']) {
-                    case User::COMMON_USER:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as common user',
-                            'signIn' => true
-                        ]);
-                    case User::AUCTION_USER:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as auction user',
-                            'signIn' => true
-                        ]);
-                    case User::MODERATOR:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as moderator',
-                            'signIn' => true
-                        ]);
+                if ($signIn['secure'] == User::COMMON_USER || $signIn['secure'] == User::AUCTION_USER) {
+                    $this->redirectToRoute('user_page');
+                } else {
+                    // todo страница модерирования
                 }
             } else {
                 return $this->render('identification/index.html.twig', [
@@ -78,23 +66,10 @@ class IdentificationController extends AbstractController
             if ($signUp['success']) {
                 setcookie('auth_key', $signUp['user']->getAuthKey(), 0, '/');
                 $secure = $signUp['user']->getSecurity();
-                // todo заменить заглушки на страницы пользователей
-                switch ($secure) {
-                    case User::COMMON_USER:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as common user',
-                            'signIn' => false
-                        ]);
-                    case User::AUCTION_USER:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as auction user',
-                            'signIn' => false
-                        ]);
-                    case User::MODERATOR:
-                        return $this->render('identification/index.html.twig', [
-                            'message' => 'sing in as moderator',
-                            'signIn' => false
-                        ]);
+                if ($secure == User::COMMON_USER || $secure == User::AUCTION_USER) {
+                    $this->redirectToRoute('user_page');
+                } else {
+                    // todo страница модерирования
                 }
             } else {
                 return $this->render('identification/index.html.twig', [
@@ -110,6 +85,10 @@ class IdentificationController extends AbstractController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     private function signIn(Request $request): array
     {
         $login = $request->request->get('login');
@@ -127,6 +106,11 @@ class IdentificationController extends AbstractController
         }
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \Exception
+     */
     private function singUp(Request $request): array
     {
         $login = $request->request->get('login');
