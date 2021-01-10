@@ -13,12 +13,12 @@
         Личная информация
         <form method="post" action="{{ url('user_change') }}">
             Логин: <input type="text" name="login" maxlength="20" value="{{ user.login }}" disabled> <br>
-            Пароль: <input type="password" name="password" maxlength="20" value="{{ user.password }}" disabled> <br>
-            ФИО: <input type="text" name="personal" maxlength="80" value="{{ user.fio }}" disabled> <br>
-            День рождения: <input type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="{{ user.birthday }}" disabled> <br>
-            <input type="submit" value="Сохранить" hidden name="change">
+            Пароль: <input class="input" type="password" name="password" maxlength="20" value="{{ user.password }}" disabled> <br>
+            ФИО: <input class="input" type="text" name="personal" maxlength="80" value="{{ user.fio }}" disabled> <br>
+            День рождения: <input class="input" type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="{{ user.birthday }}" disabled> <br>
+            <input class="input" type="submit" value="Сохранить" hidden name="change">
         </form>
-        <input type="submit" value="Изменить" name="changeFake">
+        <input type="submit" value="Изменить" name="changeFake" id="changeFake">
     </div>
 {% endblock %}
 
