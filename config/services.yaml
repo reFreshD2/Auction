@@ -43,3 +43,5 @@ services:
   App\Controller\UserPageController:
     arguments:
       $userRepository: '@App\Repository\UserRepository'
+      $logger: '@logger'
+    tags: [ { name: monolog.logger, chanel: user_page } ]

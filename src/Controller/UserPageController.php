@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\Exception\CantSaveUser;
 use App\Repository\UserRepository;
 use App\Entity\User;
+use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +23,12 @@ class UserPageController extends AbstractController
      */
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    public function __construct(UserRepository $userRepository, Logger $logger)
     {
         $cookie = $_COOKIE['auth_key'];
         $this->user = $userRepository->findOneBy(['auth_key' => $cookie]);
@@ -47,15 +54,39 @@ class UserPageController extends AbstractController
      *
      * @param Request $request
      */
-    protected function changeData(Request $request) {
-        // todo сделать функцию изменения данных пользователя
+    public function changeData(Request $request)
+    {
+        if (isset($request)) {
+            if ($request->request->has("password")) {
+                $password = $request->request->get("password");
+                $this->user->setPassword($password);
+            }
+            if ($request->request->has("personal")) {
+                $FIO = $request->request->get("personal");
+                $this->user->setFIO($FIO);
+            }
+            if ($request->request->has("birthday")) {
+                $birthday = new \DateTime($request->request->get("birthday"));
+                $this->user->setBirthday($birthday);
+            }
+            try {
+                $this->userRepository->save($this->user);
+            } catch (CantSaveUser $exception) {
+                $this->logger->error($exception->getMessage(), [
+                    'user' => $this->user->toArray(),
+                    'trace' => $exception->getTraceAsString()
+                ]);
+            }
+        }
+        return $this->redirectToRoute('user_page');
     }
 
     /**
      * @Route ("/logout", name="logout")
      */
-    public function logout() {
-        setcookie("auth_key","",time()-3600,"/");
+    public function logout()
+    {
+        setcookie("auth_key", "", time() - 3600, "/");
         return $this->redirectToRoute("identification");
     }
 }
