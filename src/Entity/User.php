@@ -98,9 +98,9 @@ class User
         return $this;
     }
 
-    public function getBirthday(): ?\DateTimeInterface
+    public function getBirthday(): ?string
     {
-        return $this->birthday;
+        return $this->birthday->format("Y-m-d");
     }
 
     public function setBirthday(?\DateTimeInterface $birthday): self

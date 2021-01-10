@@ -47,9 +47,10 @@ class IdentificationController extends AbstractController
     {
         if ($request->request->has('signIn')) {
             $signIn = $this->signIn($request);
+            $secure = $signIn['user']->getSecurity();
             if ($signIn['success']) {
-                if ($signIn['secure'] == User::COMMON_USER || $signIn['secure'] == User::AUCTION_USER) {
-                    $this->redirectToRoute('user_page');
+                if ($secure == User::COMMON_USER || $secure == User::AUCTION_USER) {
+                    return $this->redirectToRoute('user_page');
                 } else {
                     // todo страница модерирования
                 }
@@ -67,7 +68,7 @@ class IdentificationController extends AbstractController
                 setcookie('auth_key', $signUp['user']->getAuthKey(), 0, '/');
                 $secure = $signUp['user']->getSecurity();
                 if ($secure == User::COMMON_USER || $secure == User::AUCTION_USER) {
-                    $this->redirectToRoute('user_page');
+                    return $this->redirectToRoute('user_page');
                 } else {
                     // todo страница модерирования
                 }
@@ -97,7 +98,7 @@ class IdentificationController extends AbstractController
             $user = $this->userRepository->findOneBy(['login' => $login, 'password' => $password]);
             if (isset($user)) {
                 setcookie('auth_key', $user->getAuthKey(), 0, '/');
-                return ['success' => true, 'secure' => $user->getSecurity()];
+                return ['success' => true, 'user' => $user];
             } else {
                 return ['success' => false, 'message' => 'Неверный логин и/или пароль'];
             }

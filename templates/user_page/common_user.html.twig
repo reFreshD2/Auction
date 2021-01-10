@@ -3,19 +3,20 @@
 {% block body %}
     <div class="header">
         <a name="main" href="">Аукционы</a>
-        <a name="user_page" href="">Личная страница</a>
+        <a name="user_page" href="{{ url('user_page') }}">Личная страница</a>
         {{ user.login }} | {{ user.cash }}
-        <a name="logout" href="">Выйти?</a>
+        <a name="topUp" href="">(Пополнить)</a>
+        <a name="logout" href="{{ url('logout') }}">Выйти?</a>
     </div>
 
     <div class="body">
         Личная информация
         <form method="post" action="{{ url('user_change') }}">
             Логин: <input type="text" name="login" maxlength="20" value="{{ user.login }}" disabled> <br>
-            Пароль: <input type="password" name="password" maxlength="20" value="{{ user.password }}"> <br>
-            ФИО: <input type="text" name="personal" maxlength="80" value="{{ user.fio }}"> <br>
-            День рождения: <input type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="{{ user.birthday }}"> <br>
-            <input type="submit" value="Изменить" hidden name="change">
+            Пароль: <input type="password" name="password" maxlength="20" value="{{ user.password }}" disabled> <br>
+            ФИО: <input type="text" name="personal" maxlength="80" value="{{ user.fio }}" disabled> <br>
+            День рождения: <input type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="{{ user.birthday }}" disabled> <br>
+            <input type="submit" value="Сохранить" hidden name="change">
         </form>
         <input type="submit" value="Изменить" name="changeFake">
     </div>

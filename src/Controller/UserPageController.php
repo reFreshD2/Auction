@@ -21,9 +21,9 @@ class UserPageController extends AbstractController
      */
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository, Request $request)
+    public function __construct(UserRepository $userRepository)
     {
-        $cookie = $request->cookies->get('auth_key');
+        $cookie = $_COOKIE['auth_key'];
         $this->user = $userRepository->findOneBy(['auth_key' => $cookie]);
         $this->userRepository = $userRepository;
     }
@@ -49,5 +49,13 @@ class UserPageController extends AbstractController
      */
     protected function changeData(Request $request) {
         // todo сделать функцию изменения данных пользователя
+    }
+
+    /**
+     * @Route ("/logout", name="logout")
+     */
+    public function logout() {
+        setcookie("auth_key","",time()-3600,"/");
+        return $this->redirectToRoute("identification");
     }
 }
