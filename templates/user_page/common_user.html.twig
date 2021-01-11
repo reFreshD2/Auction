@@ -5,7 +5,7 @@
         <a name="main" href="">Аукционы</a>
         <a name="user_page" href="{{ url('user_page') }}">Личная страница</a>
         {{ user.login }} | {{ user.cash }}
-        <a name="topUp" href="">(Пополнить)</a>
+        <a name="topUp" href="{{ url('payment') }}">(Пополнить)</a>
         <a name="logout" href="{{ url('logout') }}">Выйти?</a>
     </div>
 

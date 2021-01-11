@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <img src="/assets/img/sber.png" hidden id="sberImg">
+    <img src="/assets/img/phone.png" hidden id="phoneImg">
+    <form method="post" action="{{ url('payment') }}">
+        Выберите метод пополнения <br>
+        <div>
+            <input type="radio" id="choice1" value="SberOnline">
+            <label for="choice1">SberOnline</label>
+            <input type="radio" id="choice2" value="Phone">
+            <label for="choice1">Phone</label> <br>
+        </div>
+
+        Введите номер телефона:
+        <input type="tel" placeholder="+7 (999)-999-99-99"> <br>
+        Введите сумму:
+        <input type="number" name="cash"> <br>
+        <input type="submit" value="Пополнить">
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/js/payment.js"></script>
+{% endblock %}
