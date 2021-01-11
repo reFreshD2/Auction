@@ -31,6 +31,7 @@ class UserPageController extends AbstractController
     public function __construct(UserRepository $userRepository, Logger $logger)
     {
         $cookie = $_COOKIE['auth_key'];
+        $this->logger = $logger;
         $this->user = $userRepository->findOneBy(['auth_key' => $cookie]);
         $this->userRepository = $userRepository;
     }
@@ -79,6 +80,30 @@ class UserPageController extends AbstractController
             }
         }
         return $this->redirectToRoute('user_page');
+    }
+
+    /**
+     * @Route("/payment", name="payment")
+     * @param Request $request
+     * @return Response
+     */
+    public function payment(Request $request): Response
+    {
+        if ($request->request->has('cash')) {
+            $cash = $this->user->getCash();
+            $cash += $request->request->get('cash');
+            $this->user->setCash($cash);
+            try {
+                $this->userRepository->save($this->user);
+                return $this->redirectToRoute('user_page');
+            } catch (CantSaveUser $exception) {
+                $this->logger->error($exception->getMessage(), [
+                    'user' => $this->user->toArray(),
+                    'trace' => $exception->getTraceAsString()
+                ]);
+            }
+        }
+        return $this->render('user_page/payment.html.twig');
     }
 
     /**
