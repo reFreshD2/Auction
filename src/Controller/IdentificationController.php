@@ -47,8 +47,8 @@ class IdentificationController extends AbstractController
     {
         if ($request->request->has('signIn')) {
             $signIn = $this->signIn($request);
-            $secure = $signIn['user']->getSecurity();
             if ($signIn['success']) {
+                $secure = $signIn['user']->getSecurity();
                 if ($secure == User::COMMON_USER || $secure == User::AUCTION_USER) {
                     return $this->redirectToRoute('user_page');
                 } else {
