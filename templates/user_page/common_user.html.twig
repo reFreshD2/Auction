@@ -13,12 +13,51 @@
         Личная информация
         <form method="post" action="{{ url('user_change') }}">
             Логин: <input type="text" name="login" maxlength="20" value="{{ user.login }}" disabled> <br>
-            Пароль: <input class="input" type="password" name="password" maxlength="20" value="{{ user.password }}" disabled> <br>
+            Пароль: <input class="input" type="password" name="password" maxlength="20" value="{{ user.password }}"
+                           disabled> <br>
             ФИО: <input class="input" type="text" name="personal" maxlength="80" value="{{ user.fio }}" disabled> <br>
-            День рождения: <input class="input" type="date" name="birthday" min="1940-01-01" max="2002-12-31" value="{{ user.birthday }}" disabled> <br>
+            День рождения: <input class="input" type="date" name="birthday" min="1940-01-01" max="2002-12-31"
+                                  value="{{ user.birthday }}" disabled> <br>
             <input class="input" type="submit" value="Сохранить" hidden name="change">
         </form>
         <input type="submit" value="Изменить" name="changeFake" id="changeFake">
+    </div>
+    <div class="product">
+        <a href="{{ url('product_add') }}">+</a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Фото</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in user.products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.discription }}</td>
+                    <td>{{ product.price }}</td>
+                    <td><img src="{{ product.url }}" width="60" height="60"></td>
+                    <td> {% if product.moderation_status == 0%}
+                            <img src="/public/assets/img/moderating.png">
+                        {% else %}
+                            <img src="/public/assets/img/ok.png">
+                        {% endif %}
+                    <td>
+                        <a href="{{ path('product_edit', {'id': product.id}) }}"> Редактировать </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Вы еще не добавили товар</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
 

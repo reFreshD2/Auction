@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+    const UNDER_MODERATION = 0;
+    const IS_VISIBLE = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -51,6 +54,11 @@ class Product
      * @ORM\Column(type="string", length=255)
      */
     private $url;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="products")
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -137,6 +145,18 @@ class Product
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

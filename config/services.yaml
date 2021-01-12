@@ -45,3 +45,12 @@ services:
       $userRepository: '@App\Repository\UserRepository'
       $logger: '@logger'
     tags: [ { name: monolog.logger, chanel: user_page } ]
+
+  App\Controller\ProductController:
+    arguments:
+      $productRepository: '@App\Repository\ProductRepository'
+      $userRepository: '@App\Repository\UserRepository'
+      $logger: '@logger'
+      $uri: '%env(STORAGE_URL)%'
+      $key: '%env(API_KEY)%'
+    tags: [ { name: monolog.logger, chanel: product } ]

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form method="post" action="{{ url('product_add') }}" enctype="multipart/form-data">
+        <input type="hidden" name="isAdd">
+        Название: <input type="text" name="name"> <br>
+        Категория: <input type="text" name="category"> <br>
+        Цена: <input type="number" name="price"> <br>
+        Описание: <input type="text" name="description"> <br>
+        <input type="hidden" name="MAX_FILE_SIZE" value="300000"/>
+        Фотография: <input type="file" name="photo"> <br>
+        <div class="message"> {{ message }} </div> <br>
+        <input type="submit" name="add" value="Добавить">
+    </form>
+{% endblock %}

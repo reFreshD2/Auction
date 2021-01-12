@@ -3,7 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Repository\Exception\CantSaveProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\PDOException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,37 +18,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager|\Doctrine\ORM\EntityManagerInterface|\Doctrine\ORM\Mapping\ClassMetadata
+     */
+    private $entityManager;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
+        $this->entityManager = $this->getEntityManager();
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    public function save(Product $product) {
+        try {
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+        } catch (ORMException | DBALException | PDOException $exception) {
+            throw new CantSaveProduct($exception->getMessage());
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Product
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
